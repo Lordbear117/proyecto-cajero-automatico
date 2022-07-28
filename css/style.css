@@ -5,7 +5,7 @@
 }
 
 body{
-    background-image: url("./img/b1.png");
+    background-image: url("/img/b1.png");
 }
 
 #btnLogOut {
@@ -36,4 +36,10 @@ body{
 
 .success {
     color: green
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
