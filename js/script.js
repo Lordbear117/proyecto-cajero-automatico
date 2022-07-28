@@ -1,6 +1,8 @@
 // Varaibles que guardan el nombre de usuario, contrasena del usuario y sus saldo.
 let usuario, contrasena, sld;
 
+let arrUser = [];
+
 // Los ID de los divs que contienen toda el area del inicio de sesion y toda el area del cajero automatico.
 let Login = document.getElementById("Login");
 let Cajero = document.getElementById("Cajero");
@@ -31,13 +33,28 @@ let alert = document.getElementById("alert");
 // El texto de bienvenida cuando se ingresa a la pantalla del cajero automatico
 let textoBienvenida = document.getElementById("textoBienvenida");
 
+let fecha = document.getElementById("fecha");
+
 
 //Funcion para solo permitir escribir numeros en el campo de contraseña
+// toma solo los valores ASCII entre el 48 y el 57 los cuales son del 0 al 9.
 document.getElementById("tbPassword").addEventListener("keypress", function (evt) {
     if (evt.which < 48 || evt.which > 57) {
         evt.preventDefault();
     }
 });
+
+// Obtiene la fecha del dia actual
+function fechaActual (){
+    var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = dd + '/' + mm + '/' + yyyy;
+fecha.textContent = `Hoy es ${today}`;
+}
+
 
   // Esta funcion limpia todos los campos del inicio de sesion y los deja en blanco para seleccionar algo nuevo.
 function fLimpiarLogin() {
@@ -180,12 +197,16 @@ cmbCuenta.addEventListener("change", function () {
             contrasena = cuentas.c1.contra;
             sld = cuentas.c1.saldo;
 
+            tbUser.value = `${usuario}`;
+
             break;
         case 'c2':
 
             usuario = cuentas.c2.usuario;
             contrasena = cuentas.c2.contra;
             sld = cuentas.c2.saldo;
+
+            tbUser.value = `${usuario}`;
 
             break;
         case 'c3':
@@ -194,12 +215,12 @@ cmbCuenta.addEventListener("change", function () {
             contrasena = cuentas.c3.contra;
             sld = cuentas.c3.saldo;
 
+            tbUser.value = `${usuario}`;
+
             break;
-    }
+    } 
 
-    tbUser.value = '';
     tbPassword.value = '';
-
 });
 
 // Funcion que valida el inicio de sesion, si existen algun error primero lo muestra, caso contrario
