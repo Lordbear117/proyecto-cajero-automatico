@@ -1,28 +1,34 @@
-
+// Varaibles que guardan el nombre de usuario, contrasena del usuario y sus saldo.
 let usuario, contrasena, sld;
 
+// Los ID de los divs que contienen toda el area del inicio de sesion y toda el area del cajero automatico.
 let Login = document.getElementById("Login");
 let Cajero = document.getElementById("Cajero");
 
+// Colapsable de cuentas, y los text box de usuario y contrasena
 let cmbCuenta = document.getElementById("cbCuentas");
 let tbUser = document.getElementById('tbUser');
 let tbPassword = document.getElementById('tbPassword');
 
+// Mensajes de error que se encuentran deabjo de los elementos de input o text box
 let errorUser = document.getElementById('errorUser');
 let errorPassword = document.getElementById('errorPassword');
 let errorCuenta = document.getElementById('errorCuenta');
 let errorMonto = document.getElementById('errorMonto');
 
-
+//Los text button de saldo y monto
 let tbSaldo = document.getElementById('tbSaldo');
 let tbMonto = document.getElementById('tbMonto');
 
+// Los botones de depositar monto, disponer monto y de cerrar sesion.
 let btnDepositar = document.getElementById('btnDepositar');
 let btnDisponer = document.getElementById('btnDisponer');
 let btnLogOut = document.getElementById("btnLogOut");
 
+// El alert box que parece cuando se cumplen algunas condiciones 
 let alert = document.getElementById("alert");
 
+// El texto de bienvenida cuando se ingresa a la pantalla del cajero automatico
 let textoBienvenida = document.getElementById("textoBienvenida");
 
 
@@ -33,6 +39,7 @@ document.getElementById("tbPassword").addEventListener("keypress", function (evt
     }
 });
 
+  // Esta funcion limpia todos los campos del inicio de sesion y los deja en blanco para seleccionar algo nuevo.
 function fLimpiarLogin() {
     cmbCuenta.value = "";
     tbUser.value = "";
@@ -370,3 +377,7 @@ btnLogOut.addEventListener("click", function () {
 
     fLimpiarLogin();
 });
+
+
+
+
