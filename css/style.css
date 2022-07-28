@@ -1,0 +1,45 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-image: url("/img/b1.png");
+}
+/* proyecto-cajero-automatico */
+#btnLogOut {
+    margin-bottom: 5px;
+    margin-right: 15px;
+    margin-left: 10px;
+}
+
+#contenedorAlerta {
+    width: 100;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding: 15px;
+}
+
+.hide {
+    display: none;   
+}
+
+.show {
+    display: block;   
+}
+
+.error {
+    color: red
+}
+
+.success {
+    color: green
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
