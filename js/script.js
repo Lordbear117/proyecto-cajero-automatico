@@ -1,77 +1,106 @@
-
+// Varaibles que guardan el nombre de usuario, contrasena del usuario y sus saldo.
 let usuario, contrasena, sld;
 
-let Login         = document.getElementById("Login");
-let Cajero        = document.getElementById("Cajero");
+let arrUser = [];
 
-let cmbCuenta     = document.getElementById("cbCuentas");
-let tbUser        = document.getElementById('tbUser');
-let tbPassword    = document.getElementById('tbPassword');
+// Los ID de los divs que contienen toda el area del inicio de sesion y toda el area del cajero automatico.
+let Login = document.getElementById("Login");
+let Cajero = document.getElementById("Cajero");
 
-let errorUser     = document.getElementById('errorUser');
+// Colapsable de cuentas, y los text box de usuario y contrasena
+let cmbCuenta = document.getElementById("cbCuentas");
+let tbUser = document.getElementById('tbUser');
+let tbPassword = document.getElementById('tbPassword');
+
+// Mensajes de error que se encuentran deabjo de los elementos de input o text box
+let errorUser = document.getElementById('errorUser');
 let errorPassword = document.getElementById('errorPassword');
-let errorCuenta   = document.getElementById('errorCuenta');
+let errorCuenta = document.getElementById('errorCuenta');
+let errorMonto = document.getElementById('errorMonto');
 
-let tbSaldo       = document.getElementById('tbSaldo');
-let tbMonto       = document.getElementById('tbMonto');
+//Los text button de saldo y monto
+let tbSaldo = document.getElementById('tbSaldo');
+let tbMonto = document.getElementById('tbMonto');
 
-let btnDepositar  = document.getElementById('btnDepositar');
-let btnDisponer   = document.getElementById('btnDisponer');
-let btnLogOut     = document.getElementById("btnLogOut");
+// Los botones de depositar monto, disponer monto y de cerrar sesion.
+let btnDepositar = document.getElementById('btnDepositar');
+let btnDisponer = document.getElementById('btnDisponer');
+let btnLogOut = document.getElementById("btnLogOut");
 
-let alert         = document.getElementById("alert");
+// El alert box que parece cuando se cumplen algunas condiciones 
+let alert = document.getElementById("alert");
 
+// El texto de bienvenida cuando se ingresa a la pantalla del cajero automatico
 let textoBienvenida = document.getElementById("textoBienvenida");
 
+let fecha = document.getElementById("fecha");
 
 
-document.getElementById("tbPassword").addEventListener("keypress", function(evt) {
-  if (evt.which < 48 || evt.which > 57) {
-    evt.preventDefault();
-  }
+//Funcion para solo permitir escribir numeros en el campo de contraseña
+// toma solo los valores ASCII entre el 48 y el 57 los cuales son del 0 al 9.
+document.getElementById("tbPassword").addEventListener("keypress", function (evt) {
+    if (evt.which < 48 || evt.which > 57) {
+        evt.preventDefault();
+    }
 });
 
-function fLimpiarLogin () {
-    cmbCuenta.value  = "";
-    tbUser.value     = "";
+// Obtiene la fecha del dia actual
+function fechaActual (){
+    var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = dd + '/' + mm + '/' + yyyy;
+fecha.textContent = `Hoy es ${today}`;
+}
+
+
+  // Esta funcion limpia todos los campos del inicio de sesion y los deja en blanco para seleccionar algo nuevo.
+function fLimpiarLogin() {
+    cmbCuenta.value = "";
+    tbUser.value = "";
     tbPassword.value = "";
 }
 
+// Funcion se usa despues en el boton de retirar, si es menor a 10 el saldo no permitira hacer la operacion
 function fValidarRetiro() {
-    
+
     let saldoRestante = Number(tbSaldo.value) - (Number(tbMonto.value));
-    
-    if ( saldoRestante < 10) {
+
+    if (saldoRestante < 10) {
         return false
     } else {
         return true;
-    } 
+    }
 }
 
+// Igual que la anterior, se usara en el boton de deposito para validar que el saldo no sea mayor a 990
 function fValidarDeposito() {
-    
+
     let depositoExceso = Number(tbSaldo.value) + (Number(tbMonto.value));
-    
-    if ( depositoExceso > 990) {
+
+    if (depositoExceso > 990) {
         return false
     } else {
         return true;
-    } 
+    }
 }
 
+// Funcion para mostrar errores en caso de que estos se presenten segun las reglas de negocio y validaciones.
 const showErrors = (error) => {
     if (error === 'datos') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Faltan datos</h4> <p>Tanto usuario como contrase&ntilde;a son obligatorios</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
-    
+
     } else if (error === 'cuenta') {
         errorCuenta.classList.remove('hide');
         errorCuenta.classList.add('show');
-        
+
         cmbCuenta.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -85,7 +114,7 @@ const showErrors = (error) => {
     else if (error === 'user') {
         errorUser.classList.remove('hide');
         errorUser.classList.add('show');
-        
+
         tbUser.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -98,7 +127,7 @@ const showErrors = (error) => {
     } else if (error === 'password') {
         errorPassword.classList.remove('hide');
         errorPassword.classList.add('show');
-        
+
         tbPassword.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -108,19 +137,19 @@ const showErrors = (error) => {
             tbPassword.classList.remove('is-invalid');
         }, 3000);
 
-    }  else if (error ==='retiroMayor') {
+    } else if (error === 'retiroMayor') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Retiro mayor al permitido</h4> <p>Tu cuenta al menos debe de tener 10 pesos</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
     }
 
-    else if (error ==='depositoMayor') {
+    else if (error === 'depositoMayor') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Deposito mayor al permitido</h4> <p>Tu cuenta no puede tener mas de 990 pesos</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
@@ -128,37 +157,74 @@ const showErrors = (error) => {
 
 }
 
-cmbCuenta.addEventListener("change", function() {
+// Funcion que muestra la cantidad que se a retirado o se ha depositado en el cajero automatico
+const showSuccess = (success) => {
+    if (success === 'disponer') {
+
+        errorMonto.classList.remove('hide');
+        errorMonto.classList.add('show');
+        errorMonto.classList.remove('error');
+        errorMonto.classList.add('success');
+        errorMonto.textContent = `Retiraste $${Number(tbMonto.value)} de tu cuenta`;
+
+        setTimeout(() => {
+            errorMonto.classList.remove('show');
+            errorMonto.classList.add('hide');
+        }, 5000);
+
+    } else if (success === 'depositar') {
+
+        errorMonto.classList.remove('hide');
+        errorMonto.classList.add('show');
+        errorMonto.classList.remove('error');
+        errorMonto.classList.add('success');
+        errorMonto.textContent = `Depositaste $${Number(tbMonto.value)} a tu cuenta`;
+
+        setTimeout(() => {
+            errorMonto.classList.remove('show');
+            errorMonto.classList.add('hide');
+        }, 5000);
+    }
+}
+
+// Funcion que toma la cuenta del usuario y luego asgina los valores correspondientes para la seccion actual
+cmbCuenta.addEventListener("change", function () {
 
     switch (cmbCuenta.value) {
         case 'c1':
 
-            usuario     = cuentas.c1.usuario;
-            contrasena  = cuentas.c1.contra;
-            sld         = cuentas.c1.saldo;
+            usuario = cuentas.c1.usuario;
+            contrasena = cuentas.c1.contra;
+            sld = cuentas.c1.saldo;
+
+            tbUser.value = `${usuario}`;
 
             break;
         case 'c2':
 
-            usuario     = cuentas.c2.usuario;
-            contrasena  = cuentas.c2.contra;
-            sld         = cuentas.c2.saldo;
+            usuario = cuentas.c2.usuario;
+            contrasena = cuentas.c2.contra;
+            sld = cuentas.c2.saldo;
+
+            tbUser.value = `${usuario}`;
 
             break;
         case 'c3':
 
-            usuario     = cuentas.c3.usuario;
-            contrasena  = cuentas.c3.contra;
-            sld         = cuentas.c3.saldo;
+            usuario = cuentas.c3.usuario;
+            contrasena = cuentas.c3.contra;
+            sld = cuentas.c3.saldo;
+
+            tbUser.value = `${usuario}`;
 
             break;
-    }
+    } 
 
-    tbUser.value = '';
     tbPassword.value = '';
-
 });
 
+// Funcion que valida el inicio de sesion, si existen algun error primero lo muestra, caso contrario
+// oculta la pantalla de inicio de sesion y muestra la del cajero automatico en la misma pantalla.
 const validarLogin = (user, password) => {
     if (cmbCuenta.value === '') {
         showErrors('cuenta')
@@ -186,7 +252,8 @@ const validarLogin = (user, password) => {
     }
 }
 
-
+// Funcion que recopila los datos del form de inicio de sesion y luego llama la funcion anterior para 
+// validar los datos obtenidos, si hay error se detiene, caso contrario continua.
 frmLogin.addEventListener('submit', (evento) => {
     evento.preventDefault();
 
@@ -194,7 +261,7 @@ frmLogin.addEventListener('submit', (evento) => {
 });
 
 
-
+// Esta es la funcion del boton de Depositar, aqui se hacen todas las validaciones referentes a los depositos de la cuenta.
 btnDepositar.addEventListener('click', (evento) => {
     evento.preventDefault();
 
@@ -203,7 +270,7 @@ btnDepositar.addEventListener('click', (evento) => {
     if (tbMonto.value != '' && Number(tbMonto.value) > 0) {
 
         if (!fValidarDeposito()) {
-            
+
             showErrors('depositoMayor');
             tbMonto.value = '';
 
@@ -236,6 +303,9 @@ btnDepositar.addEventListener('click', (evento) => {
             }
 
             tbSaldo.value = `${nvoMonto}`;
+
+            showSuccess('depositar');
+
             tbMonto.value = '';
 
         }
@@ -243,6 +313,7 @@ btnDepositar.addEventListener('click', (evento) => {
 
 })
 
+// Esta es la funcion del boton disponer, aqui se hacen todas las validaciones que tienen que ver con los retiros bancarios.
 btnDisponer.addEventListener('click', (evento) => {
     evento.preventDefault();
 
@@ -257,7 +328,12 @@ btnDisponer.addEventListener('click', (evento) => {
 
             tbMonto.classList.add('is-invalid');
 
+            errorMonto.classList.remove('success');
+            errorMonto.classList.add('error');
+
             tbMonto.value = '';
+
+            errorMonto.textContent = `No puedes disponer mas de lo que tienes`;
 
             setTimeout(() => {
                 errorMonto.classList.remove('show');
@@ -301,12 +377,16 @@ btnDisponer.addEventListener('click', (evento) => {
             }
 
             tbSaldo.value = `${nvoMonto}`;
+
+            showSuccess('disponer');
+
             tbMonto.value = '';
         }
     }
 
 });
 
+// Esta es la funcion para cerrar sesion, muestra la pantalla de inicio de sesion y esconde la del cajero automatico.
 btnLogOut.addEventListener("click", function () {
     Login.classList.remove('hide');
     Login.classList.add('show');
@@ -318,3 +398,7 @@ btnLogOut.addEventListener("click", function () {
 
     fLimpiarLogin();
 });
+
+
+
+
