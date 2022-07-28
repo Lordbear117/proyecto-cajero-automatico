@@ -1,54 +1,54 @@
 
 let usuario, contrasena, sld;
 
-let Login         = document.getElementById("Login");
-let Cajero        = document.getElementById("Cajero");
+let Login = document.getElementById("Login");
+let Cajero = document.getElementById("Cajero");
 
-let cmbCuenta     = document.getElementById("cbCuentas");
-let tbUser        = document.getElementById('tbUser');
-let tbPassword    = document.getElementById('tbPassword');
+let cmbCuenta = document.getElementById("cbCuentas");
+let tbUser = document.getElementById('tbUser');
+let tbPassword = document.getElementById('tbPassword');
 
-let errorUser     = document.getElementById('errorUser');
+let errorUser = document.getElementById('errorUser');
 let errorPassword = document.getElementById('errorPassword');
-let errorCuenta   = document.getElementById('errorCuenta');
-let errorMonto   = document.getElementById('errorMonto');
+let errorCuenta = document.getElementById('errorCuenta');
+let errorMonto = document.getElementById('errorMonto');
 
 
-let tbSaldo       = document.getElementById('tbSaldo');
-let tbMonto       = document.getElementById('tbMonto');
+let tbSaldo = document.getElementById('tbSaldo');
+let tbMonto = document.getElementById('tbMonto');
 
-let btnDepositar  = document.getElementById('btnDepositar');
-let btnDisponer   = document.getElementById('btnDisponer');
-let btnLogOut     = document.getElementById("btnLogOut");
+let btnDepositar = document.getElementById('btnDepositar');
+let btnDisponer = document.getElementById('btnDisponer');
+let btnLogOut = document.getElementById("btnLogOut");
 
-let alert         = document.getElementById("alert");
+let alert = document.getElementById("alert");
 
 let textoBienvenida = document.getElementById("textoBienvenida");
 
 
 //Funcion para solo permitir escribir numeros en el campo de contraseña
-document.getElementById("tbPassword").addEventListener("keypress", function(evt) {
-  if (evt.which < 48 || evt.which > 57) {
-    evt.preventDefault();
-  }
+document.getElementById("tbPassword").addEventListener("keypress", function (evt) {
+    if (evt.which < 48 || evt.which > 57) {
+        evt.preventDefault();
+    }
 });
 
-function fLimpiarLogin () {
-    cmbCuenta.value  = "";
-    tbUser.value     = "";
+function fLimpiarLogin() {
+    cmbCuenta.value = "";
+    tbUser.value = "";
     tbPassword.value = "";
 }
 
 // Funcion se usa despues en el boton de retirar, si es menor a 10 el saldo no permitira hacer la operacion
 function fValidarRetiro() {
-    
+
     let saldoRestante = Number(tbSaldo.value) - (Number(tbMonto.value));
-    
-    if ( saldoRestante < 10) {
+
+    if (saldoRestante < 10) {
         return false
     } else {
         return true;
-    } 
+    }
 }
 
 // Igual que la anterior, se usara en el boton de deposito para validar que el saldo no sea mayor a 990
@@ -68,15 +68,15 @@ const showErrors = (error) => {
     if (error === 'datos') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Faltan datos</h4> <p>Tanto usuario como contrase&ntilde;a son obligatorios</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
-    
+
     } else if (error === 'cuenta') {
         errorCuenta.classList.remove('hide');
         errorCuenta.classList.add('show');
-        
+
         cmbCuenta.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -90,7 +90,7 @@ const showErrors = (error) => {
     else if (error === 'user') {
         errorUser.classList.remove('hide');
         errorUser.classList.add('show');
-        
+
         tbUser.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -103,7 +103,7 @@ const showErrors = (error) => {
     } else if (error === 'password') {
         errorPassword.classList.remove('hide');
         errorPassword.classList.add('show');
-        
+
         tbPassword.classList.add('is-invalid');
 
         setTimeout(() => {
@@ -113,19 +113,19 @@ const showErrors = (error) => {
             tbPassword.classList.remove('is-invalid');
         }, 3000);
 
-    }  else if (error ==='retiroMayor') {
+    } else if (error === 'retiroMayor') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Retiro mayor al permitido</h4> <p>Tu cuenta al menos debe de tener 10 pesos</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
     }
 
-    else if (error ==='depositoMayor') {
+    else if (error === 'depositoMayor') {
         alert.classList.remove('hide');
         alert.innerHTML = '<h4 class="alert-heading">Deposito mayor al permitido</h4> <p>Tu cuenta no puede tener mas de 990 pesos</p>'
-        
+
         setTimeout(() => {
             alert.classList.add('hide');
         }, 3000);
@@ -136,56 +136,56 @@ const showErrors = (error) => {
 // Funcion que muestra la cantidad que se a retirado o se ha depositado en el cajero automatico
 const showSuccess = (success) => {
     if (success === 'disponer') {
-       
+
         errorMonto.classList.remove('hide');
         errorMonto.classList.add('show');
         errorMonto.classList.remove('error');
         errorMonto.classList.add('success');
         errorMonto.textContent = `Retiraste $${Number(tbMonto.value)} de tu cuenta`;
-        
+
         setTimeout(() => {
             errorMonto.classList.remove('show');
-            errorMonto.classList.add('hide');                  
+            errorMonto.classList.add('hide');
         }, 5000);
 
-    } else if (success === 'depositar'){
-        
+    } else if (success === 'depositar') {
+
         errorMonto.classList.remove('hide');
         errorMonto.classList.add('show');
         errorMonto.classList.remove('error');
         errorMonto.classList.add('success');
         errorMonto.textContent = `Depositaste $${Number(tbMonto.value)} a tu cuenta`;
-        
+
         setTimeout(() => {
             errorMonto.classList.remove('show');
-            errorMonto.classList.add('hide');                  
+            errorMonto.classList.add('hide');
         }, 5000);
     }
 }
 
 // Funcion que toma la cuenta del usuario y luego asgina los valores correspondientes para la seccion actual
-cmbCuenta.addEventListener("change", function() {
+cmbCuenta.addEventListener("change", function () {
 
     switch (cmbCuenta.value) {
         case 'c1':
 
-            usuario     = cuentas.c1.usuario;
-            contrasena  = cuentas.c1.contra;
-            sld         = cuentas.c1.saldo;
+            usuario = cuentas.c1.usuario;
+            contrasena = cuentas.c1.contra;
+            sld = cuentas.c1.saldo;
 
             break;
         case 'c2':
 
-            usuario     = cuentas.c2.usuario;
-            contrasena  = cuentas.c2.contra;
-            sld         = cuentas.c2.saldo;
+            usuario = cuentas.c2.usuario;
+            contrasena = cuentas.c2.contra;
+            sld = cuentas.c2.saldo;
 
             break;
         case 'c3':
 
-            usuario     = cuentas.c3.usuario;
-            contrasena  = cuentas.c3.contra;
-            sld         = cuentas.c3.saldo;
+            usuario = cuentas.c3.usuario;
+            contrasena = cuentas.c3.contra;
+            sld = cuentas.c3.saldo;
 
             break;
     }
@@ -242,7 +242,7 @@ btnDepositar.addEventListener('click', (evento) => {
     if (tbMonto.value != '' && Number(tbMonto.value) > 0) {
 
         if (!fValidarDeposito()) {
-            
+
             showErrors('depositoMayor');
             tbMonto.value = '';
 
@@ -275,9 +275,9 @@ btnDepositar.addEventListener('click', (evento) => {
             }
 
             tbSaldo.value = `${nvoMonto}`;
-           
+
             showSuccess('depositar');
-            
+
             tbMonto.value = '';
 
         }
@@ -301,7 +301,7 @@ btnDisponer.addEventListener('click', (evento) => {
             tbMonto.classList.add('is-invalid');
 
             errorMonto.classList.remove('success');
-            errorMonto.classList.add('error'); 
+            errorMonto.classList.add('error');
 
             tbMonto.value = '';
 
@@ -347,11 +347,11 @@ btnDisponer.addEventListener('click', (evento) => {
 
                     break;
             }
-           
+
             tbSaldo.value = `${nvoMonto}`;
 
             showSuccess('disponer');
-            
+
             tbMonto.value = '';
         }
     }
